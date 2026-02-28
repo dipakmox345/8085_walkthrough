@@ -297,11 +297,11 @@ const programs = [
 ];
 
 function useWidth() {
-  const [w, setW] = useState(window.innerWidth);
+  const [w, setW] = useState(() => window.innerWidth);
   useEffect(() => {
-    const h = () => setW(window.innerWidth);
-    window.addEventListener("resize", h);
-    return () => window.removeEventListener("resize", h);
+    const handler = () => setW(window.innerWidth);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
   }, []);
   return w;
 }
@@ -323,10 +323,10 @@ export default function App() {
   const goPrev = () => { if (currentStep > 0) setCurrentStep(s => s - 1); };
   const selectProg = (i) => { setSelectedProg(i); setCurrentStep(0); setShowAll(false); setSidebarOpen(false); };
 
-  const sidebarW = mobile ? "100%" : tablet ? "160px" : "190px";
+
 
   return (
-    <div style={{ minHeight: "100vh", height: "100vh", background: "#070b14", fontFamily: "'Courier New', monospace", color: "#c8d8f0", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ height: "100dvh", width: "100%", background: "#070b14", fontFamily: "'Courier New', monospace", color: "#c8d8f0", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap');
         * { box-sizing: border-box; }
@@ -370,8 +370,7 @@ export default function App() {
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Desktop sidebar */}
-        {!tablet && (
-          <div style={{ width: sidebarW, flexShrink: 0, background: "#080c18", borderRight: "1px solid #1a2e48", overflowY: "auto", padding: "10px 6px" }}>
+        {!tablet && <div style={{ width: "clamp(180px, 18vw, 260px)", flexShrink: 0, background: "#080c18", borderRight: "1px solid #1a2e48", overflowY: "auto", padding: "10px 6px" }}>
             <div style={{ color: "#2a5a8a", fontSize: "0.55rem", letterSpacing: "2px", padding: "4px 8px 10px", textTransform: "uppercase" }}>Programs</div>
             {programs.map((p, i) => (
               <button key={p.id} className="pb" onClick={() => selectProg(i)} style={{ width: "100%", background: i === selectedProg ? "rgba(0,180,220,.1)" : "transparent", border: `1px solid ${i === selectedProg ? "#00b4dc" : "#1a2e48"}`, borderRadius: "5px", padding: "7px 9px", marginBottom: "3px", cursor: "pointer", textAlign: "left", transition: "all .15s" }}>
@@ -380,7 +379,7 @@ export default function App() {
               </button>
             ))}
           </div>
-        )}
+}
 
         {/* Main */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
